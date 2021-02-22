@@ -243,7 +243,7 @@ int parse_config(void)
 
 	ret = parse_arp();
 	if (ret) {
-		fprintf(stderr, "error parsing port\n");
+		fprintf(stderr, "error parsing arp\n");
 		config_destroy(&cfg);
 		return ret;
 	}

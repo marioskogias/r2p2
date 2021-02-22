@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 ROOTDIR=$(shell git rev-parse --show-toplevel)
-RTE_SDK=$(ROOTDIR)/dpdk
+RTE_SDK=$(ROOTDIR)/../dpdk-20.08
 R2P2LIB_DIR=$(ROOTDIR)/r2p2
 RAFT_DIR=$(shell git rev-parse --show-toplevel)/../raft
 
@@ -31,7 +31,7 @@ include $(R2P2LIB_DIR)/dir.mk
 
 
 CC=gcc
-CFLAGS += -g -O3 -I$(ROOTDIR)/netstack/inc -I$(R2P2LIB_DIR)/inc -I$(RTE_SDK)/x86_64-native-linuxapp-gcc/include -I$(RAFT_DIR)/include -DNO_BATCH #-DACCELERATED #-DRAFT_STATS
+CFLAGS += -g -O3 -I$(ROOTDIR)/netstack/inc -I$(R2P2LIB_DIR)/inc -I$(RTE_SDK)/build/include -I$(RAFT_DIR)/include -DNO_BATCH #-DACCELERATED #-DRAFT_STATS
 
 ifeq ($(WITH_RAFT), 1)
 	CFLAGS += -DWITH_RAFT
@@ -72,7 +72,7 @@ WERROR_FLAGS += -Wformat-nonliteral -Wformat-security
 WERROR_FLAGS += -Wundef -Wwrite-strings
 
 CFLAGS += $(WERROR_FLAGS) -mavx2
-LDFLAGS= -Wl,--whole-archive -Wl,-ldpdk -Wl,--no-whole-archive -lrt -lpthread -lm -ldl -L$(RTE_SDK)/x86_64-native-linuxapp-gcc/lib -lconfig -lnuma -lgcov --coverage -lpcap
+LDFLAGS= -Wl,--whole-archive -Wl,-ldpdk -Wl,--no-whole-archive -lrt -lpthread -lm -ldl -L$(RTE_SDK)/build/lib -lconfig -lnuma -lgcov --coverage -libverbs -lmlx4 #-lrte_pmd_mlx4 #-lpcap
 
 SRCS_C := $(addprefix $(ROOTDIR)/netstack/dp/, $(DP_SRC)) $(addprefix $(ROOTDIR)/netstack/net/, $(NET_SRC)) $(addprefix $(R2P2LIB_DIR)/, $(R2P2_SRC_C))
 OBJS_C := $(patsubst %.c, %.o, $(SRCS_C))
